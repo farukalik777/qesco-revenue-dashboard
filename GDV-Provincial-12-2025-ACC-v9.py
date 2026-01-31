@@ -138,7 +138,8 @@ if df is not None:
     m1.metric("Total Receivables", rec_label)
     m2.metric("Billing Accuracy", f"{f_df['ACCURCY'].mean():.1f}%")
     m3.metric("Current Assessment", f"{f_df['ASSESSMENT_AMNT'].sum()/1e6:.2f}M")
-    m4.metric("Selected Records", f"{len(f_df):,}")
+    m4.metric("Current Payment", f"{f_df['PAYMENT_NOR'].sum()/1e6:.2f}M")
+    m5.metric("Selected Records", f"{len(f_df):,}")
 # --- TABS (Enhanced Visibility & Prominence) ---
     tab1, tab2, tab3 = st.tabs(["📊 Revenue Insights", "🎯 Accuracy Analysis", "📋 Master Ledger"])
     
