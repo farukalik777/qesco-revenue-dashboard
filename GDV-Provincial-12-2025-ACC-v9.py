@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 # 1. PAGE CONFIGURATION
-st.set_page_config(page_title="Provincial  Govt Dept Dashboard", layout="wide", page_icon="🏛️")
+st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
 
 # Vibrant Custom Styling to match your provided screenshots
 st.markdown("""
@@ -127,7 +127,7 @@ if df is not None:
     if status_view == "Active (0)": f_df = f_df[f_df['STATUS'] == "Active"]
     elif status_view == "PDISC (1)": f_df = f_df[f_df['STATUS'] == "Disconnected"]
 # --- TOP HEADER & METRICS ---
-    st.markdown("## 🏛️ Provincial Govt Departments Dashboard")
+    st.markdown("## ⚡ QESCO Billing / Revenue & Receivables DashBoard (Provincial Government Departments)")
     st.divider()
 
 # We create 6 columns to fit the new metrics comfortably
@@ -334,4 +334,5 @@ if df is not None:
             mime="text/csv",
         )
 else:
+
     st.warning("🔄 System Initializing... Please verify data connections.")
