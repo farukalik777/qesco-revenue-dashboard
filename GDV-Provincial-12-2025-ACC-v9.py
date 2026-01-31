@@ -131,7 +131,7 @@ if df is not None:
     st.markdown("## 🏛️  Provincial Govt Departments Dashboard")
     st.divider()
 
-    m1, m2, m3, m4 = st.columns(4)
+    m1, m2, m3, m4,m5  = st.columns(5)
     trec = f_df['TOTAL_CL_BAL'].sum()
     rec_label = f"{trec/1e9:.2f}B" if trec >= 1e9 else f"{trec/1e6:.2f}M"
     
@@ -322,3 +322,4 @@ if df is not None:
         )
 else:
     st.warning("🔄 System Initializing... Please verify data connections.")
+
