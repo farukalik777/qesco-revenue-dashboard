@@ -152,7 +152,7 @@ if df is not None:
     m4.metric("Current Payment", f"{total_payment/1e6:.2f}M")
     m5.metric("Payment %", f"{pay_pct:.1f}%") # Percentage of Payment
     m6.metric("Selected Records", f"{len(f_df):,}")
-
+   
 # --- TABS (Enhanced Visibility & Prominence) ---
     tab1, tab2, tab3 = st.tabs(["📊 Revenue Insights", "🎯 Accuracy Analysis", "📋 Master Ledger"])
     
@@ -335,5 +335,3 @@ if df is not None:
         )
 else:
     st.warning("🔄 System Initializing... Please verify data connections.")
-
-
