@@ -188,7 +188,7 @@ if df is not None:
                 st.plotly_chart(fig, use_container_width=True)
                 
             with c2:
-                st.markdown("### 🏆 Top 10  Debtors Departments ")
+                st.markdown("###  Top 10  Defaulter  Departments ")
                 dept_debt = f_df.groupby('DEPARTMENT_NAME')['TOTAL_CL_BAL'].sum().nlargest(10).reset_index()
                 
                 # Donut chart with larger center for better label visibility
@@ -336,3 +336,4 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
+
