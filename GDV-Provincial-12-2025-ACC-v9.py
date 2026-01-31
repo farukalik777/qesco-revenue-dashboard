@@ -127,7 +127,7 @@ if df is not None:
     if status_view == "Active (0)": f_df = f_df[f_df['STATUS'] == "Active"]
     elif status_view == "PDISC (1)": f_df = f_df[f_df['STATUS'] == "Disconnected"]
 # --- TOP HEADER & METRICS ---
-    st.markdown("## ⚡ QESCO Billing / Revenue & Receivables DashBoard (Provincial Government Departments)")
+    st.markdown("## ⚡ QESCO|Provincial Government Departments DashBoard")
     st.divider()
 
 # We create 6 columns to fit the new metrics comfortably
@@ -336,4 +336,5 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
+
 
