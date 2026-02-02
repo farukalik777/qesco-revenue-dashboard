@@ -286,7 +286,7 @@ if check_password():
         final_table = pd.concat([perf_data[['DIVNAME', 'ASSESSMENT_AMNT', 'PAYMENT_NOR', 'RECOVERY_%', 'TOTAL_CL_BAL']], qesco_total], ignore_index=True)
 
         # --- 3. DISPLAY COMPACT TABLE ---
-        st.markdown("### 📋 Executive Billing and Payment  Summary (Millions)")
+        st.markdown("### 📋 Division Wise  Billing and Payment  Summary (Millions)")
         
         # CSS to force smaller row height and text
         st.markdown("""
@@ -429,5 +429,6 @@ if check_password():
     else:
 
         st.warning("🔄 System Initializing... Please verify data connections.")
+
 
 
