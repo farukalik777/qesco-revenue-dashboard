@@ -275,7 +275,7 @@ if check_password():
 
         # --- 2. CALCULATE QESCO TOTAL ROW ---
         qesco_total = pd.DataFrame({
-            'DIVNAME': ['⭐ QESCO TOTAL'],
+            'DIVNAME': ['⭐  TOTAL'],
             'ASSESSMENT_AMNT': [perf_data['ASSESSMENT_AMNT'].sum()],
             'PAYMENT_NOR': [perf_data['PAYMENT_NOR'].sum()],
             'RECOVERY_%': [(perf_data['PAYMENT_NOR'].sum() / perf_data['ASSESSMENT_AMNT'].sum() * 100) if perf_data['ASSESSMENT_AMNT'].sum() > 0 else 0],
@@ -286,7 +286,7 @@ if check_password():
         final_table = pd.concat([perf_data[['DIVNAME', 'ASSESSMENT_AMNT', 'PAYMENT_NOR', 'RECOVERY_%', 'TOTAL_CL_BAL']], qesco_total], ignore_index=True)
 
         # --- 3. DISPLAY COMPACT TABLE ---
-        st.markdown("### 📋 Executive Financial Summary (Millions)")
+        st.markdown("### 📋 Executive Billing and Payment  Summary (Millions)")
         
         # CSS to force smaller row height and text
         st.markdown("""
@@ -429,4 +429,5 @@ if check_password():
     else:
 
         st.warning("🔄 System Initializing... Please verify data connections.")
+
 
