@@ -228,14 +228,14 @@ if df is not None:
                     plot_bgcolor='white'
                 )
                 st.plotly_chart(fig, use_container_width=True)
-	    # --- 1. DATA PREPARATION & SORTING ---
+	    	# --- 1. DATA PREPARATION & SORTING ---
 	        # We group by Circle and Division to keep the hierarchy sequence
-		    perf_data = f_df.groupby(['CIRCLENAME', 'DIVNAME']).agg({
-		            'ASSESSMENT_AMNT': 'sum',
-		            'PAYMENT_NOR': 'sum',
-		            'TOTAL_CL_BAL': 'sum'
-		        }).reset_index()
-		
+		perf_data = f_df.groupby(['CIRCLENAME', 'DIVNAME']).agg({
+			'ASSESSMENT_AMNT': 'sum',
+			'PAYMENT_NOR': 'sum',
+			'TOTAL_CL_BAL': 'sum'
+			}).reset_index()
+			
 	        # Sort by Circle and then Division to follow official QESCO sequence
 	        perf_data = perf_data.sort_values(['CIRCLENAME', 'DIVNAME'])
 	
@@ -432,6 +432,7 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
+
 
 
 
