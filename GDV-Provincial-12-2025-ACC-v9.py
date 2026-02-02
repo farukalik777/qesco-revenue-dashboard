@@ -47,7 +47,7 @@ if check_password():
 st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
 
 	# Vibrant Custom Styling to match your provided screenshots
-	st.markdown("""
+st.markdown("""
 	    <style>
 	    .main { background-color: #f0f2f6; }
 	    .stMetric { 
@@ -379,5 +379,6 @@ st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout=
 	
 	
 	
+
 
 
