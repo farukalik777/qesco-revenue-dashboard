@@ -1,37 +1,3 @@
-	# 1. PAGE CONFIGURATION
-	st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
-
-	# Vibrant Custom Styling to match your provided screenshots
-	st.markdown("""
-		<style>
-		.main { background-color: #f0f2f6; }
-		.stMetric { 
-			background-color: #ffffff; 
-			padding: 15px; 
-			border-radius: 10px; 
-			box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-			border-top: 3px solid #6c757d;
-		}
-		div[data-testid="stSidebar"] { background-color: #e9ecef; }
-		.stTabs [data-baseweb="tab-list"] { gap: 10px; }
-		.stTabs [data-baseweb="tab"] {
-			height: 40px;
-			white-space: pre-wrap;
-			background-color: #f8f9fa;
-			border-radius: 5px 5px 0px 0px;
-			padding: 5px 20px;
-		}
-		.stTabs [aria-selected="true"] { background-color: #ffffff; border-bottom: 2px solid #ff4b4b; }
-		</style>
-		""", unsafe_allow_html=True)
-
-	# --- CONFIGURATION ---
-	FILES = {
-		"REVENUE": "1yrWTmDqNwM-7MUTYbSRjy8kW9watFm-8",
-		"HIERARCHY": "1PXzjMPsYH_41rSaOHEfOmjwxBfHF9WbX",
-		"DEPARTMENTS": "1dHIIzj5gpwqU4yQ6ZQgpiys-DHYF-5qp"
-	}
-
 	def get_drive_url(file_id):
 		return f"https://drive.google.com/uc?id={file_id}"
 
@@ -330,5 +296,3 @@
 	else:
 
 		st.warning("🔄 System Initializing... Please verify data connections.")
-
-
