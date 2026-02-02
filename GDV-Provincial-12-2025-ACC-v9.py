@@ -83,7 +83,7 @@ def get_drive_url(file_id):
 def clean_and_pad(val, length):
     if pd.isna(val) or str(val).strip().lower() in ['nan', 'none', '', 'total']: 
 	        return "0" * length
-	clean_val = str(val).split('.')[0].strip()
+		clean_val = str(val).split('.')[0].strip()
 	   return clean_val.zfill(length)
 
 	# --- DATA ENGINE ---
@@ -379,6 +379,7 @@ def load_vibrant_data():
 	
 	
 	
+
 
 
 
