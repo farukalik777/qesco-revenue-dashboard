@@ -42,10 +42,9 @@ def check_password():
 if check_password():
     # ALL YOUR EXISTING CODE GOES INSIDE THIS IF STATEMENT
     st.success("Access Granted")
-    
-    # Place your load_vibrant_data(), Header, Metrics, and Tabs here...
+	# Place your load_vibrant_data(), Header, Metrics, and Tabs here...
 	# 1. PAGE CONFIGURATION
-		st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
+st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
 
 	# Vibrant Custom Styling to match your provided screenshots
 	st.markdown("""
@@ -380,4 +379,5 @@ if check_password():
 	
 	
 	
+
 
