@@ -4,6 +4,46 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 
+def check_password():
+    """Returns True if the user had the correct password."""
+
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["password"] == "Qesco@786":  # Set your password here
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # don't store password
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # First run, show input for password.
+        st.text_input(
+            "Enter Password to Access QESCO Dashboard", 
+            type="password", 
+            on_change=password_entered, 
+            key="password"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Password incorrect, show input + error.
+        st.text_input(
+            "Enter Password to Access QESCO Dashboard", 
+            type="password", 
+            on_change=password_entered, 
+            key="password"
+        )
+        st.error("😕 Password incorrect")
+        return False
+    else:
+        # Password correct.
+        return True
+
+# --- MAIN APP LOGIC ---
+if check_password():
+    # ALL YOUR EXISTING CODE GOES INSIDE THIS IF STATEMENT
+    st.success("Access Granted")
+    
+    # Place your load_vibrant_data(), Header, Metrics, and Tabs here...
 # 1. PAGE CONFIGURATION
 st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
 
@@ -336,5 +376,6 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
+
 
 
