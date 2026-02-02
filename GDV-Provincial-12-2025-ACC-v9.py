@@ -254,7 +254,60 @@ if check_password():
                     )
                     st.plotly_chart(fig_pie, use_container_width=True)
 
+        # --- 1. DATA PREPARATION & SORTING ---
+        # We group by Circle and Division to keep the hierarchy sequence
+        perf_data = f_df.groupby(['CIRCLENAME', 'DIVNAME']).agg({
+            'ASSESSMENT_AMNT': 'sum',
+            'PAYMENT_NOR': 'sum',
+            'TOTAL_CL_BAL': 'sum'
+        }).reset_index()
+
+        # Sort by Circle and then Division to follow official QESCO sequence
+        perf_data = perf_data.sort_values(['CIRCLENAME', 'DIVNAME'])
+
+        # Calculate Recovery %
+        perf_data['RECOVERY_%'] = (perf_data['PAYMENT_NOR'] / perf_data['ASSESSMENT_AMNT'] * 100).fillna(0)
+
+        # Convert values to Millions
+        perf_data['ASSESSMENT_AMNT'] = perf_data['ASSESSMENT_AMNT'] / 1e6
+        perf_data['PAYMENT_NOR'] = perf_data['PAYMENT_NOR'] / 1e6
+        perf_data['TOTAL_CL_BAL'] = perf_data['TOTAL_CL_BAL'] / 1e6
+
+        # --- 2. CALCULATE QESCO TOTAL ROW ---
+        qesco_total = pd.DataFrame({
+            'DIVNAME': ['⭐ QESCO TOTAL'],
+            'ASSESSMENT_AMNT': [perf_data['ASSESSMENT_AMNT'].sum()],
+            'PAYMENT_NOR': [perf_data['PAYMENT_NOR'].sum()],
+            'RECOVERY_%': [(perf_data['PAYMENT_NOR'].sum() / perf_data['ASSESSMENT_AMNT'].sum() * 100) if perf_data['ASSESSMENT_AMNT'].sum() > 0 else 0],
+            'TOTAL_CL_BAL': [perf_data['TOTAL_CL_BAL'].sum()]
+        })
+
+        # Final Table for display (Removing Circle column for a cleaner look)
+        final_table = pd.concat([perf_data[['DIVNAME', 'ASSESSMENT_AMNT', 'PAYMENT_NOR', 'RECOVERY_%', 'TOTAL_CL_BAL']], qesco_total], ignore_index=True)
+
+        # --- 3. DISPLAY COMPACT TABLE ---
+        st.markdown("### 📋 Executive Financial Summary (Millions)")
         
+        # CSS to force smaller row height and text
+        st.markdown("""
+            <style>
+            div[data-testid="stDataFrame"] td { font-size: 11px !important; padding: 2px !important; }
+            div[data-testid="stDataFrame"] th { font-size: 12px !important; }
+            </style>
+            """, unsafe_allow_html=True)
+
+        st.dataframe(
+            final_table, 
+            use_container_width=True, 
+            hide_index=True,
+            column_config={
+                "DIVNAME": st.column_config.TextColumn("Division", width="small"),
+                "ASSESSMENT_AMNT": st.column_config.NumberColumn("Assessment", format="%.1f M", width="small"),
+                "PAYMENT_NOR": st.column_config.NumberColumn("Payment", format="%.1f M", width="small"),
+                "RECOVERY_%": st.column_config.NumberColumn("Rec %", format="%.1f%%", width="small"),
+                "TOTAL_CL_BAL": st.column_config.NumberColumn("Closing", format="%.1f M", width="small")
+            }
+        )
         with tab2:
             st.markdown("<h2 style='text-align: center; color: #b22222;'>🎯 Accuracy  Analysis</h2>", unsafe_allow_html=True)
             st.divider()
