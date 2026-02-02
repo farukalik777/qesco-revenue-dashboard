@@ -77,11 +77,11 @@ FILES = {
     "DEPARTMENTS": "1dHIIzj5gpwqU4yQ6ZQgpiys-DHYF-5qp"
 	}
 
-	def get_drive_url(file_id):
-	    return f"https://drive.google.com/uc?id={file_id}"
+def get_drive_url(file_id):
+    return f"https://drive.google.com/uc?id={file_id}"
 	
-	def clean_and_pad(val, length):
-	    if pd.isna(val) or str(val).strip().lower() in ['nan', 'none', '', 'total']: 
+def clean_and_pad(val, length):
+    if pd.isna(val) or str(val).strip().lower() in ['nan', 'none', '', 'total']: 
 	        return "0" * length
 	    clean_val = str(val).split('.')[0].strip()
 	    return clean_val.zfill(length)
@@ -379,6 +379,7 @@ FILES = {
 	
 	
 	
+
 
 
 
