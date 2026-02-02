@@ -195,9 +195,7 @@ if df is not None:
    
 # --- TABS (Enhanced Visibility & Prominence) ---
     tab1, tab2, tab3 = st.tabs(["📊 Revenue Insights", "🎯 Accuracy Analysis", "📋 Master Ledger"])
-
-
-	
+    
     with tab1:
         # Using a container with a subtle background to make charts "pop"
         with st.container():
@@ -228,7 +226,8 @@ if df is not None:
                     plot_bgcolor='white'
                 )
                 st.plotly_chart(fig, use_container_width=True)
-	    	with c2:
+                
+            with c2:
                 st.markdown("###  Top 10  Defaulter  Departments ")
                 dept_debt = f_df.groupby('DEPARTMENT_NAME')['TOTAL_CL_BAL'].sum().nlargest(10).reset_index()
                 
@@ -377,11 +376,5 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
-
-
-
-
-
-
 
 
