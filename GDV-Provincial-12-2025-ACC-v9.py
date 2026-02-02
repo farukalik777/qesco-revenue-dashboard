@@ -45,7 +45,7 @@ if check_password():
     
     # Place your load_vibrant_data(), Header, Metrics, and Tabs here...
 	# 1. PAGE CONFIGURATION
-	st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
+st.set_page_config(page_title="QESCO (Provincial  Govt Dept Dashboard)", layout="wide", page_icon="🏛️")
 
 # Vibrant Custom Styling to match your provided screenshots
 st.markdown("""
@@ -376,5 +376,6 @@ if df is not None:
 else:
 
     st.warning("🔄 System Initializing... Please verify data connections.")
+
 
 
