@@ -194,10 +194,102 @@ if check_password():
             st.metric("Records", f"{len(f_df):,}")
 
     # Tabs
-    tab1, tab2, tab3 = st.tabs(["📈 Arrears & Closing Balance", "📑 Custom Report", "📋 Master Ledger"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Revenue Overview", "🎯 Accuracy Analysis", "📈 Arrears & Closing Balance", "📑 Custom Report", "📋 Master Ledger"])
 
-    # TAB 1: Arrears Analysis
+    # ===== TAB 1: REVENUE OVERVIEW =====
     with tab1:
+        st.markdown("#### 📊 Revenue Performance Analysis")
+
+        if len(f_df) > 0:
+            c1, c2 = st.columns([1.6, 1], gap="large")
+            with c1:
+                st.markdown("##### Assessment vs Recovery by Division")
+                perf_data = f_df.groupby('DIVNAME')[['ASSESSMENT_AMNT', 'PAYMENT_NOR']].sum().reset_index()
+                perf_data = perf_data.sort_values('ASSESSMENT_AMNT', ascending=False).head(15)
+                fig = px.bar(perf_data, x='DIVNAME', y=['ASSESSMENT_AMNT', 'PAYMENT_NOR'], barmode='group',
+                            color_discrete_sequence=['#0056b3', '#00d4ff'])
+                fig.update_layout(height=350, legend=dict(orientation="h", yanchor="bottom", y=1.02), plot_bgcolor='white')
+                st.plotly_chart(fig, use_container_width=True)
+
+            with c2:
+                st.markdown("##### Top 10 Departments by Assessment")
+                dept_ass = f_df.groupby('DEPARTMENT_NAME')['ASSESSMENT_AMNT'].sum().nlargest(10).reset_index()
+                fig_pie = px.pie(dept_ass, values='ASSESSMENT_AMNT', names='DEPARTMENT_NAME', hole=0.4,
+                               color_discrete_sequence=px.colors.qualitative.Prism)
+                fig_pie.update_layout(height=350, showlegend=False, margin=dict(t=50, b=50, l=10, r=10))
+                st.plotly_chart(fig_pie, use_container_width=True)
+
+            st.markdown("##### Revenue by Circle")
+            circle_data = f_df.groupby('CIRCLENAME').agg({
+                'ASSESSMENT_AMNT': 'sum', 'PAYMENT_NOR': 'sum', 'ARREARS': 'sum'
+            }).reset_index().sort_values('ASSESSMENT_AMNT', ascending=False)
+            circle_data['COLLECTION%'] = (circle_data['PAYMENT_NOR'] / circle_data['ASSESSMENT_AMNT'] * 100).round(1)
+            fig_circle = px.bar(circle_data, x='CIRCLENAME', y=['ASSESSMENT_AMNT', 'PAYMENT_NOR', 'ARREARS'],
+                               barmode='group', color_discrete_sequence=['#003366', '#00d4ff', '#ff6b6b'])
+            fig_circle.update_layout(height=300, plot_bgcolor='white')
+            st.plotly_chart(fig_circle, use_container_width=True)
+
+            st.markdown("##### Executive Summary by Division")
+            exec_tab = f_df.groupby(['CIRCLENAME', 'DIVNAME']).agg({
+                'ASSESSMENT_AMNT': 'sum', 'PAYMENT_NOR': 'sum', 'TOTAL_CL_BAL': 'sum', 'ARREARS': 'sum'
+            }).reset_index().sort_values(['CIRCLENAME', 'DIVNAME'])
+            exec_tab['RECOVERY_%'] = (exec_tab['PAYMENT_NOR'] / exec_tab['ASSESSMENT_AMNT'] * 100).fillna(0)
+            for c in ['ASSESSMENT_AMNT', 'PAYMENT_NOR', 'TOTAL_CL_BAL', 'ARREARS']: exec_tab[c] /= 1e6
+            st.dataframe(exec_tab, use_container_width=True, hide_index=True, column_config={
+                "DIVNAME": st.column_config.TextColumn("Division"),
+                "ASSESSMENT_AMNT": st.column_config.NumberColumn("Assessment (M)", format="%.2f"),
+                "PAYMENT_NOR": st.column_config.NumberColumn("Payment (M)", format="%.2f"),
+                "TOTAL_CL_BAL": st.column_config.NumberColumn("Closing (M)", format="%.2f"),
+                "ARREARS": st.column_config.NumberColumn("Arrears (M)", format="%.2f"),
+                "RECOVERY_%": st.column_config.NumberColumn("Recovery %", format="%.1f")
+            })
+        else:
+            st.info("Please upload a data file to view analysis.")
+
+    # ===== TAB 2: ACCURACY ANALYSIS =====
+    with tab2:
+        st.markdown("#### 🎯 Accuracy Analysis")
+
+        if len(f_df) > 0:
+            acc1, acc2, acc3, acc4 = st.columns(4)
+            match_sum = f_df['MATCH'].sum()
+            not_match_sum = f_df['NOT MATCH'].sum()
+            all_sum = f_df['ALL'].sum()
+            accuracy_pct = (match_sum/all_sum*100) if all_sum > 0 else 0
+
+            with acc1:
+                st.metric("Accuracy %", f"{accuracy_pct:.1f}%")
+            with acc2:
+                st.metric("Match", f"{match_sum:,.0f}")
+            with acc3:
+                st.metric("Not Match", f"{not_match_sum:,.0f}")
+            with acc4:
+                st.metric("Total Records", f"{all_sum:,.0f}")
+
+            c1, c2 = st.columns([1, 1.2], gap="large")
+            with c1:
+                st.markdown("##### Accuracy Heatmap by Location")
+                h_axis = 'SUBDIVNAME' if s_sub else ('DIVNAME' if s_div else 'CIRCLENAME')
+                heat_data = f_df.groupby([h_axis, 'STATUS'])['ACCURCY'].mean().unstack().fillna(0)
+                fig_heat = px.imshow(heat_data, text_auto=".1f", color_continuous_scale='RdYlGn')
+                fig_heat.update_layout(height=400)
+                st.plotly_chart(fig_heat, use_container_width=True)
+
+            with c2:
+                st.markdown("##### Department Accuracy Ranking")
+                dept_acc = f_df.groupby('DEPARTMENT_NAME')['ACCURCY'].mean().sort_values(ascending=True).reset_index()
+                dept_acc = dept_acc[dept_acc['ACCURCY'] > 0].tail(15)
+                fig_rank = px.bar(dept_acc, y='DEPARTMENT_NAME', x='ACCURCY', orientation='h',
+                                 color='ACCURCY', color_continuous_scale='RdYlGn',
+                                 text=dept_acc['ACCURCY'].apply(lambda x: f'{x:.1f}%'))
+                fig_rank.add_vline(x=100, line_dash="dot", line_color="black")
+                fig_rank.update_layout(height=400, xaxis_range=[0, 120], plot_bgcolor='white')
+                st.plotly_chart(fig_rank, use_container_width=True)
+        else:
+            st.info("Please upload a data file to view analysis.")
+
+    # ===== TAB 3: ARREARS & CLOSING BALANCE =====
+    with tab3:
         st.markdown("#### 📈 Arrears & Closing Balance Analysis")
 
         if len(f_df) > 0:
@@ -241,8 +333,8 @@ if check_password():
         else:
             st.info("Please upload a data file to view analysis.")
 
-    # TAB 2: Custom Report
-    with tab2:
+    # ===== TAB 4: CUSTOM REPORT =====
+    with tab4:
         st.markdown("#### 📑 Customizable Report")
 
         if len(f_df) > 0:
@@ -431,8 +523,8 @@ if check_password():
         else:
             st.info("Please upload a data file to generate reports.")
 
-    # TAB 3: Master Ledger
-    with tab3:
+    # TAB 5: MASTER LEDGER
+    with tab5:
         st.markdown("#### 📋 Detailed Revenue Ledger")
 
         if len(f_df) > 0:
